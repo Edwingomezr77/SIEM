@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Trash2, CreditCard as Edit3, Package, ArrowUpDown } from 'lucide-react';
+import React from 'react';
+import { Trash2, CreditCard as Edit3, Package } from 'lucide-react';
 
 export interface ShipmentItem {
   id: string;
@@ -16,21 +16,7 @@ interface ShipmentTableProps {
 }
 
 export const ShipmentTable: React.FC<ShipmentTableProps> = ({ items, onDelete, onEdit }) => {
-  const [sortOrder, setSortOrder] = useState<'newest' | 'oldest'>('newest');
-
   const totalPiezas = items.reduce((sum, item) => sum + item.cantidad, 0);
-
-  const sortedItems = [...items].sort((a, b) => {
-    if (sortOrder === 'newest') {
-      return b.timestamp.getTime() - a.timestamp.getTime();
-    } else {
-      return a.timestamp.getTime() - b.timestamp.getTime();
-    }
-  });
-
-  const toggleSortOrder = () => {
-    setSortOrder(prev => prev === 'newest' ? 'oldest' : 'newest');
-  };
 
   if (items.length === 0) {
     return (
@@ -69,16 +55,7 @@ export const ShipmentTable: React.FC<ShipmentTableProps> = ({ items, onDelete, o
                   Cantidad
                 </th>
                 <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  <button
-                    onClick={toggleSortOrder}
-                    className="flex items-center space-x-1 hover:text-gray-700 transition-colors"
-                  >
-                    <span>Hora de Registro</span>
-                    <ArrowUpDown className="w-4 h-4" />
-                  </button>
-                  <span className="text-xs font-normal text-gray-400 block mt-1">
-                    {sortOrder === 'newest' ? 'Más reciente primero' : 'Más antigua primero'}
-                  </span>
+                  Hora de Registro
                 </th>
                 <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Acciones
@@ -86,7 +63,7 @@ export const ShipmentTable: React.FC<ShipmentTableProps> = ({ items, onDelete, o
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {sortedItems.map((item) => (
+              {items.map((item) => (
                 <tr key={item.id} className="hover:bg-gray-50 transition-colors">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm font-medium text-gray-900">{item.marca}</div>
